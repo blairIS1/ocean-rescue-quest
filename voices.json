@@ -1,0 +1,71 @@
+{
+  "welcome": "Hi! I'm Bubbles the octopus! Let's rescue ocean animals and learn how AI helps protect the sea!",
+  "menu_title": "Ocean Rescue Quest!",
+  "menu_subtitle": "Collect all tools and save the ocean!",
+  "menu_parts": "parts collected",
+  "menu_mission_complete": "Amazing! You saved the ocean!",
+
+  "quest_study": "Study the Ocean",
+  "quest_test": "Test Your Knowledge",
+  "quest_rescue": "Rescue Mission",
+
+  "part_microscope": "Microscope",
+  "part_lab": "Lab Kit",
+  "part_map": "Ocean Map",
+  "part_boat": "Rescue Boat",
+  "part_medal": "Medal",
+
+  "q1_start": "First, let's learn about ocean habitats! Every sea creature has a home. Let's figure out where they belong!",
+  "q1_title": "Quest 1: Study the Ocean!",
+  "q1_instruction": "Is this creature from the coral reef, the deep sea, the shoreline, the arctic, or the open ocean? Tap to label each one!",
+  "q1_done": "Awesome! You taught the AI about ocean habitats! Let's see how well it learned.",
+  "q1_learned": "You learned that AI needs labeled data to understand the world, just like you learned where each animal lives!",
+
+  "t_reef_clownfish_y": "Yes! Clownfish live in coral reefs, hiding in anemones!",
+  "t_reef_clownfish_n": "Actually, clownfish live in coral reefs! They hide in sea anemones.",
+  "t_deep_squid_y": "Right! Giant squid live deep in the ocean where it's very dark!",
+  "t_deep_squid_n": "Oops! Giant squid live in the deep sea, way down where it's dark!",
+  "t_shore_crab_y": "Correct! Hermit crabs live along the shoreline in tide pools!",
+  "t_shore_crab_n": "Actually, hermit crabs live on the shoreline in tide pools!",
+  "t_arctic_seal_y": "Yes! Harp seals live in freezing arctic waters!",
+  "t_arctic_seal_n": "Oops! Harp seals live in the arctic where it's super cold!",
+  "t_open_dolphin_y": "Right! Dolphins swim through the open ocean!",
+  "t_open_dolphin_n": "Actually, dolphins live in the open ocean, swimming far and wide!",
+  "t_reef_turtle_y": "Yes! Sea turtles love coral reefs!",
+  "t_reef_turtle_n": "Oops! Sea turtles hang out around coral reefs!",
+  "t_deep_angler_y": "Correct! Anglerfish live in the deep sea and glow in the dark!",
+  "t_deep_angler_n": "Actually, anglerfish live deep in the ocean where they use their light to hunt!",
+  "t_shore_starfish_y": "Yes! Starfish live in tide pools along the shore!",
+  "t_shore_starfish_n": "Oops! Starfish live on the shoreline in tide pools!",
+  "t_arctic_whale_y": "Right! Beluga whales live in cold arctic waters!",
+  "t_arctic_whale_n": "Actually, beluga whales live in the arctic where it's freezing!",
+  "t_open_shark_y": "Correct! Great white sharks roam the open ocean!",
+  "t_open_shark_n": "Oops! Great white sharks swim through the open ocean!",
+
+  "correct": "Great job! You got it right!",
+  "wrong": "Oops! Let's try again!",
+
+  "summary": "Let's look at what the AI learned from your labels!",
+  "summary_bias": "Hmm, most of your data is about one habitat. The AI might not know the others very well!",
+  "summary_learned": "You learned that AI can be biased if it doesn't get enough examples of everything!",
+
+  "q3_start": "Now let's test the AI! It will try to sort animals using what you taught it. Watch carefully!",
+  "q3_done": "The AI did pretty well! Your training data really helped!",
+  "q3_retrain": "The AI needs more training. Let's go back and teach it more!",
+  "q3_learned": "You learned that testing AI is important. If it makes mistakes, we need to give it more data!",
+
+  "q4_start": "Time for the rescue mission! Pollution is threatening ocean animals. The AI will spot dangers, but sometimes it's wrong. You decide when to act!",
+  "q4_save": "Great call! You saved that animal!",
+  "q4_crash": "Oh no! The pollution got through!",
+  "q4_ai_right": "The AI handled that one correctly!",
+  "q4_false_alarm": "That was actually safe. The AI got confused!",
+  "q4_done": "Mission complete! You and the AI make a great team!",
+  "q4_learned": "You learned that humans and AI work best together. AI spots things fast, but humans make the final call!",
+
+  "q5_start": "Final mission! Guide the rescue boat across the ocean to save all the animals!",
+  "q5_launch": "Setting sail! The AI is navigating using everything you taught it!",
+  "q5_done": "You did it! All animals are safe! The ocean is protected!",
+  "q5_learned": "You learned that AI can help protect nature, but it needs good training data from people like you!",
+
+  "all_done": "Congratulations! You completed the Ocean Rescue Quest! You're a real ocean scientist!"
+}
