@@ -6,22 +6,28 @@ let isSpeaking = false;
 let listeners: Set<() => void> = new Set();
 let unlocked = false;
 
-// Call this once on first user tap to unlock audio on mobile
-export function unlockAudio(): void {
-  if (unlocked) return;
-  unlocked = true;
-  // Create and play a silent audio context to unlock the audio pipeline
-  try {
-    const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-    const buf = ctx.createBuffer(1, 1, 22050);
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.connect(ctx.destination);
-    src.start(0);
-    // Also play+pause a silent HTML Audio to unlock that path
-    const a = new Audio();
-    a.play().then(() => a.pause()).catch(() => {});
-  } catch {}
+// Auto-register a one-time tap listener to unlock audio on mobile.
+// iOS Safari / Chrome mobile block Audio.play() unless triggered by user gesture.
+// This runs once on first touch/click anywhere, then removes itself.
+if (typeof window !== "undefined") {
+  const unlock = () => {
+    if (unlocked) return;
+    unlocked = true;
+    try {
+      const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const buf = ctx.createBuffer(1, 1, 22050);
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0);
+      const a = new Audio();
+      a.play().then(() => a.pause()).catch(() => {});
+    } catch {}
+    window.removeEventListener("touchstart", unlock);
+    window.removeEventListener("click", unlock);
+  };
+  window.addEventListener("touchstart", unlock, { once: true });
+  window.addEventListener("click", unlock, { once: true });
 }
 
 export function speak(key: string): Promise<void> {

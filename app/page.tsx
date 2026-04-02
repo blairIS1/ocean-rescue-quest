@@ -10,7 +10,7 @@ import Confetti from "./quests/Confetti";
 import SessionTimer, { useSessionTimer } from "./quests/SessionTimer";
 import SpeakingIndicator from "./quests/SpeakingIndicator";
 import { sfxTap, sfxCelebrate } from "./quests/sfx";
-import { speak, stopSpeaking, unlockAudio } from "./quests/speak";
+import { speak, stopSpeaking } from "./quests/speak";
 import { startMusic, stopMusic } from "./quests/music";
 import type { MusicStyle } from "./quests/music";
 import { recordCompletion, getCompletions } from "./quests/scores";
@@ -44,8 +44,8 @@ export default function Home() {
 
   const markDone = (i: number) => setCompleted((p) => { const n = [...p]; n[i] = true; return n; });
 
-  const startGame = () => { unlockAudio(); stopSpeaking(); sfxTap(); startMusic("ocean"); speak(VOICE.welcome).then(() => { setPhase("menu"); speak(VOICE.menuSubtitle); }); };
-  const startQuest = (p: Phase) => { unlockAudio(); stopSpeaking(); sfxTap(); setPhase(p); };
+  const startGame = () => { stopSpeaking(); sfxTap(); startMusic("ocean"); speak(VOICE.welcome).then(() => { setPhase("menu"); speak(VOICE.menuSubtitle); }); };
+  const startQuest = (p: Phase) => { stopSpeaking(); sfxTap(); setPhase(p); };
 
   if (expired) { stopMusic(); return <SessionTimer onDismiss={dismiss} />; }
 
