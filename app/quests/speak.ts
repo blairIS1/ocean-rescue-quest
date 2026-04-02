@@ -4,6 +4,25 @@ let current: HTMLAudioElement | null = null;
 let queue: Promise<void> = Promise.resolve();
 let isSpeaking = false;
 let listeners: Set<() => void> = new Set();
+let unlocked = false;
+
+// Call this once on first user tap to unlock audio on mobile
+export function unlockAudio(): void {
+  if (unlocked) return;
+  unlocked = true;
+  // Create and play a silent audio context to unlock the audio pipeline
+  try {
+    const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    // Also play+pause a silent HTML Audio to unlock that path
+    const a = new Audio();
+    a.play().then(() => a.pause()).catch(() => {});
+  } catch {}
+}
 
 export function speak(key: string): Promise<void> {
   queue = queue.then(() => new Promise<void>((resolve) => {
@@ -36,12 +55,10 @@ export function onSpeakingChange(callback: () => void): () => void {
 
 function notifyListeners(): void { listeners.forEach((cb) => cb()); }
 
-// Auto-detect basePath from Next.js config at runtime
 let _basePath: string | null = null;
 function getBasePath(): string {
   if (_basePath !== null) return _basePath;
   if (typeof window !== "undefined") {
-    // Next.js sets __NEXT_DATA__.basePath
     const nd = (window as unknown as Record<string, { basePath?: string }>).__NEXT_DATA__;
     _basePath = (nd?.basePath || "") + "/audio/";
   } else {
