@@ -4,15 +4,11 @@ let current: HTMLAudioElement | null = null;
 let queue: Promise<void> = Promise.resolve();
 let isSpeaking = false;
 let listeners: Set<() => void> = new Set();
-let unlocked = false;
 
-// Auto-register a one-time tap listener to unlock audio on mobile.
-// iOS Safari / Chrome mobile block Audio.play() unless triggered by user gesture.
-// This runs once on first touch/click anywhere, then removes itself.
+// Auto-unlock audio on mobile: iOS Safari / Chrome block Audio.play()
+// unless triggered by user gesture. This one-time listener satisfies that.
 if (typeof window !== "undefined") {
   const unlock = () => {
-    if (unlocked) return;
-    unlocked = true;
     try {
       const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const buf = ctx.createBuffer(1, 1, 22050);
@@ -20,14 +16,25 @@ if (typeof window !== "undefined") {
       src.buffer = buf;
       src.connect(ctx.destination);
       src.start(0);
-      const a = new Audio();
-      a.play().then(() => a.pause()).catch(() => {});
     } catch {}
     window.removeEventListener("touchstart", unlock);
     window.removeEventListener("click", unlock);
   };
   window.addEventListener("touchstart", unlock, { once: true });
   window.addEventListener("click", unlock, { once: true });
+}
+
+// Detect basePath from the current page URL.
+// On GitHub Pages: location.pathname = "/ocean-rescue-quest/" → basePath = "/ocean-rescue-quest"
+// On localhost:3000: location.pathname = "/" → basePath = ""
+function getBasePath(): string {
+  if (typeof window === "undefined") return "/audio/";
+  const path = window.location.pathname;
+  // Take the first path segment as basePath (matches GitHub Pages repo name)
+  const match = path.match(/^\/([^/]+)/);
+  // If the first segment looks like a page route (empty or _next), no basePath
+  if (!match || match[1] === "_next") return "/audio/";
+  return "/" + match[1] + "/audio/";
 }
 
 export function speak(key: string): Promise<void> {
@@ -60,15 +67,3 @@ export function onSpeakingChange(callback: () => void): () => void {
 }
 
 function notifyListeners(): void { listeners.forEach((cb) => cb()); }
-
-let _basePath: string | null = null;
-function getBasePath(): string {
-  if (_basePath !== null) return _basePath;
-  if (typeof window !== "undefined") {
-    const nd = (window as unknown as Record<string, { basePath?: string }>).__NEXT_DATA__;
-    _basePath = (nd?.basePath || "") + "/audio/";
-  } else {
-    _basePath = "/audio/";
-  }
-  return _basePath;
-}
