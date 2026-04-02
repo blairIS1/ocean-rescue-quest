@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
 const nextConfig = {
   output: "export",
-  basePath: process.env.NODE_ENV === "production" ? "/ocean-rescue-quest" : "",
+  basePath: isProd ? "/ocean-rescue-quest" : "",
 };
 export default nextConfig;
