@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { RESCUE_EVENTS } from "./data";
 import BubblesBuddy from "./BubblesBuddy";
+import GameImg from "./GameImg";
 import { sfxCorrect, sfxWrong, sfxTap, sfxCelebrate } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
@@ -83,7 +84,7 @@ export default function RescueMission({ onComplete }: { onComplete: () => void }
       <div className="text-sm opacity-70">{idx + 1} / {events.length}</div>
       <div className="w-full max-w-lg h-32 rounded-2xl relative overflow-hidden" style={{ background: "#0a2a4a" }}>
         <div className="text-4xl absolute transition-all" style={{ left: "15%", top: `${boatY}%`, transform: "translateY(-50%)", transitionDuration: "0.3s" }}>🚤</div>
-        {phase !== "sailing" && <div className="text-5xl absolute top-1/2 right-8" style={{ transform: "translateY(-50%)" }}>{event.emoji}</div>}
+        {phase !== "sailing" && <div className="absolute top-1/2 right-8" style={{ transform: "translateY(-50%)" }}><GameImg img={event.img} emoji={event.emoji} size={64} /></div>}
         {[20, 40, 60, 80].map((x) => <div key={x} className="absolute w-1 h-1 rounded-full bg-cyan-300 opacity-20" style={{ left: `${x}%`, top: `${(x * 37) % 80 + 10}%` }} />)}
       </div>
       {phase === "event" && aiWrong && !overridden && !aiActed && (

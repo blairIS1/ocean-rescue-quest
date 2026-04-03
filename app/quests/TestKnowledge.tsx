@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { TrainingData, generateTestRounds, CAT_LABELS } from "./data";
 import BubblesBuddy from "./BubblesBuddy";
+import GameImg from "./GameImg";
 import { sfxCorrect, sfxWrong, sfxTap } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
@@ -52,7 +53,7 @@ export default function TestKnowledge({ training, onComplete }: { training: Trai
       <h2 className="text-2xl sm:text-3xl font-bold">🧪 Quest 2: Test the AI!</h2>
       <BubblesBuddy mood={mood} size={80} />
       <div className="text-sm opacity-70">{idx + 1} / {rounds.length}</div>
-      <div className="text-7xl my-2">{scene.emoji}</div>
+      <div className="my-2"><GameImg img={scene.img} emoji={scene.emoji} size={96} /></div>
       <div className="text-xl font-semibold">{scene.label}</div>
       <div className="rounded-xl p-3 text-sm max-w-xs" style={{ background: "rgba(255,255,255,0.05)" }}>
         <div className="text-xs opacity-50 mb-1">🤖 AI sensors:</div>

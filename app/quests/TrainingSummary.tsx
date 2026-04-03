@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { CATEGORIES, TrainingData, getConfidence, CAT_LABELS } from "./data";
 import BubblesBuddy from "./BubblesBuddy";
+import GameImg from "./GameImg";
 import { sfxTap } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
@@ -28,7 +29,7 @@ export default function TrainingSummary({ training, onComplete }: { training: Tr
           const info = CAT_LABELS[cat];
           return (
             <div key={cat} className="flex items-center gap-3">
-              <span className="text-2xl">{info.emoji}</span>
+              <GameImg img={info.img} emoji={info.emoji} size={32} />
               <div className="flex-1">
                 <div className="flex justify-between text-sm mb-1">
                   <span>{info.label}</span>

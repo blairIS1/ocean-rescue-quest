@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { TRAIN_ITEMS, TrainingData, CAT_LABELS } from "./data";
 import BubblesBuddy from "./BubblesBuddy";
+import GameImg from "./GameImg";
 import { sfxCorrect, sfxWrong, sfxTap } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
@@ -61,7 +62,7 @@ export default function StudyOcean({ onComplete }: { onComplete: (data: Training
       <p className="opacity-70 text-center max-w-md text-sm">Where does this creature live?</p>
       <div className="text-sm opacity-70">{idx + 1} / {items.length}</div>
       <div className="progress-track w-64"><div className="progress-fill" style={{ width: `${(idx / items.length) * 100}%` }} /></div>
-      <div className="text-7xl my-2">{current.emoji}</div>
+      <div className="my-2"><GameImg img={current.img} emoji={current.emoji} size={96} /></div>
       <div className="text-xl font-semibold">{current.label}</div>
       <div className="text-lg min-h-[2em] font-semibold text-center">{feedback}</div>
       {!feedback && (
