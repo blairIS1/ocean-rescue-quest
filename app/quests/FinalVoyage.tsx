@@ -6,6 +6,7 @@ import { sfxCorrect, sfxTap, sfxCelebrate } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
 import Confetti from "./Confetti";
+import { useSpeakLock } from "./useSpeakLock";
 
 const STEPS = [
   { label: "🚤 Set sail!", desc: "Leaving the harbor..." },
@@ -20,15 +21,23 @@ export default function FinalVoyage({ training, onComplete }: { training: Traini
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
   const [auto, setAuto] = useState(false);
+  const locked = useSpeakLock();
 
+  // Intro voice — button stays locked until it finishes (via useSpeakLock)
   useEffect(() => { speak(VOICE.q5Start); return () => { stopSpeaking(); }; }, []);
 
+  // Auto-advance through steps, wait for voice to finish between each
   useEffect(() => {
     if (!auto || done) return;
     const t = setTimeout(() => {
       sfxCorrect();
-      if (step + 1 >= STEPS.length) { setDone(true); sfxCelebrate(); speak(VOICE.q5Done); }
-      else setStep((s) => s + 1);
+      if (step + 1 >= STEPS.length) {
+        setDone(true);
+        sfxCelebrate();
+        speak(VOICE.q5Done);
+      } else {
+        setStep((s) => s + 1);
+      }
     }, 3000);
     return () => clearTimeout(t);
   }, [auto, step, done]);
@@ -43,7 +52,7 @@ export default function FinalVoyage({ training, onComplete }: { training: Traini
         <h2 className="text-3xl font-bold text-center">🎉 Ocean Rescue Successful!</h2>
         <p className="text-xl">AI Confidence: <b>{avgConf}%</b></p>
         <p className="text-lg opacity-80 text-center max-w-md">Your training data helped Bubbles protect the whole ocean!</p>
-        <button className="btn btn-success mt-4" onClick={() => { stopSpeaking(); sfxTap(); speak(VOICE.q5Learned); onComplete(); }}>🏠 Mission Complete!</button>
+        <button className="btn btn-success mt-4" disabled={locked} onClick={() => { sfxTap(); speak(VOICE.q5Learned); onComplete(); }}>🏠 Mission Complete!</button>
       </div>
     );
   }
@@ -66,7 +75,7 @@ export default function FinalVoyage({ training, onComplete }: { training: Traini
         {STEPS.slice(0, step + 1).map((s, i) => <div key={i}>✅ {s.label}</div>)}
       </div>
       {!auto ? (
-        <button className="btn btn-primary text-xl mt-4" onClick={() => { stopSpeaking(); sfxTap(); setAuto(true); speak(VOICE.q5Launch); }}>🚤 Set Sail!</button>
+        <button className="btn btn-primary text-xl mt-4" disabled={locked} onClick={() => { sfxTap(); speak(VOICE.q5Launch).then(() => setAuto(true)); }}>🚤 Set Sail!</button>
       ) : (
         <div className="text-sm opacity-50 mt-4">🤖 Bubbles is navigating...</div>
       )}

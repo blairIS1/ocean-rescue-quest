@@ -68,7 +68,7 @@ export default function Home() {
 
   if (expired) { stopMusic(); return <SessionTimer onDismiss={dismiss} />; }
 
-  const { nodeId } = state;
+  const { nodeId, inputEnabled } = state;
 
   // ── Start screen ────────────────────────────────────────────────────────
   if (nodeId === "start") {
@@ -106,7 +106,7 @@ export default function Home() {
           {QUESTS.map((q, i) => (
             <button key={i} className="btn btn-primary flex justify-between items-center text-sm sm:text-base"
               style={{ opacity: i === 0 || completed[i - 1] ? 1 : 0.4 }}
-              disabled={i > 0 && !completed[i - 1]}
+              disabled={!inputEnabled || (i > 0 && !completed[i - 1])}
               onClick={() => { sfxTap(); send(q.event); }}>
               <span>{q.name}</span>
               {completed[i] ? <span>✅</span> : <span className="opacity-40">{PARTS[i].emoji}</span>}

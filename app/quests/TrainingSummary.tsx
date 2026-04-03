@@ -6,6 +6,7 @@ import GameImg from "./GameImg";
 import { sfxTap } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
+import { useSpeakLock } from "./useSpeakLock";
 
 export default function TrainingSummary({ training, onComplete }: { training: TrainingData; onComplete: () => void }) {
   const total = Object.values(training).reduce((a, b) => a + b, 0);
@@ -13,6 +14,7 @@ export default function TrainingSummary({ training, onComplete }: { training: Tr
   const maxCat = CATEGORIES.reduce((a, b) => ((training[a] || 0) > (training[b] || 0) ? a : b));
   const maxCount = training[maxCat] || 0;
   const isBiased = total > 0 && maxCount / total > 0.5;
+  const locked = useSpeakLock();
 
   useEffect(() => { speak(VOICE.summary).then(() => { if (isBiased) speak(VOICE.summaryBias); }); return () => { stopSpeaking(); }; }, [isBiased]);
 
@@ -50,7 +52,7 @@ export default function TrainingSummary({ training, onComplete }: { training: Tr
         </div>
       )}
       {!isBiased && missing.length > 0 && <p className="text-base opacity-70 text-center max-w-sm">⚠️ No data for {missing.map((m) => CAT_LABELS[m].label).join(", ")}!</p>}
-      <button className="btn btn-success mt-4" onClick={() => { stopSpeaking(); sfxTap(); speak(VOICE.summaryLearned); onComplete(); }}>Test the AI →</button>
+      <button className="btn btn-success mt-4" disabled={locked} onClick={() => { sfxTap(); speak(VOICE.summaryLearned); onComplete(); }}>Test the AI →</button>
     </div>
   );
 }

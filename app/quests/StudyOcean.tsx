@@ -7,6 +7,7 @@ import { sfxCorrect, sfxWrong, sfxTap } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
 import Confetti from "./Confetti";
+import { useSpeakLock } from "./useSpeakLock";
 
 export default function StudyOcean({ onComplete }: { onComplete: (data: TrainingData) => void }) {
   const [items] = useState(() => [...TRAIN_ITEMS].sort(() => Math.random() - 0.5));
@@ -16,6 +17,7 @@ export default function StudyOcean({ onComplete }: { onComplete: (data: Training
   const [mood, setMood] = useState<"idle" | "happy" | "scared">("idle");
   const [showConfetti, setShowConfetti] = useState(false);
   const [done, setDone] = useState(false);
+  const locked = useSpeakLock();
 
   useEffect(() => { speak(VOICE.q1Start); return () => { stopSpeaking(); }; }, []);
 
@@ -47,7 +49,7 @@ export default function StudyOcean({ onComplete }: { onComplete: (data: Training
         <Confetti active={true} />
         <BubblesBuddy mood="celebrate" size={120} />
         <h2 className="text-3xl font-bold">🧠 Training Complete!</h2>
-        <button className="btn btn-success mt-4" onClick={() => { stopSpeaking(); sfxTap(); speak(VOICE.q1Learned); onComplete(training); }}>
+        <button className="btn btn-success mt-4" disabled={locked} onClick={() => { sfxTap(); speak(VOICE.q1Learned); onComplete(training); }}>
           See Results →
         </button>
       </div>
@@ -68,7 +70,7 @@ export default function StudyOcean({ onComplete }: { onComplete: (data: Training
       {!feedback && (
         <div className="flex flex-wrap gap-2 justify-center max-w-sm fade-in">
           {cats.map(([key, { emoji, label }]) => (
-            <button key={key} className="btn text-sm" onClick={() => { stopSpeaking(); sfxTap(); answer(key); }}>
+            <button key={key} className="btn text-sm" disabled={locked} onClick={() => { sfxTap(); answer(key); }}>
               {emoji} {label}
             </button>
           ))}

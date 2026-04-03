@@ -7,6 +7,7 @@ import { sfxCorrect, sfxWrong, sfxTap, sfxCelebrate } from "./sfx";
 import { speak, stopSpeaking } from "./speak";
 import { VOICE } from "./voice";
 import Confetti from "./Confetti";
+import { useSpeakLock } from "./useSpeakLock";
 
 export default function RescueMission({ onComplete }: { onComplete: () => void }) {
   const [events] = useState(() => [...RESCUE_EVENTS]);
@@ -24,6 +25,7 @@ export default function RescueMission({ onComplete }: { onComplete: () => void }
 
   const event = events[idx];
   const aiWrong = event.correct === "rescue";
+  const locked = useSpeakLock();
 
   useEffect(() => {
     if (phase !== "sailing") return;
@@ -70,7 +72,7 @@ export default function RescueMission({ onComplete }: { onComplete: () => void }
         <BubblesBuddy mood="celebrate" size={140} />
         <h2 className="text-3xl font-bold">Rescue Complete!</h2>
         <div className="flex gap-6 text-lg"><span>🦸 Saved: {saves}/{totalRescue}</span><span>😅 Missed: {oops}</span></div>
-        <button className="btn btn-success mt-4" onClick={() => { stopSpeaking(); sfxTap(); sfxCelebrate(); speak(VOICE.q4Learned); onComplete(); }}>Final Quest →</button>
+        <button className="btn btn-success mt-4" disabled={locked} onClick={() => { sfxTap(); sfxCelebrate(); speak(VOICE.q4Learned); onComplete(); }}>Final Quest →</button>
       </div>
     );
   }
